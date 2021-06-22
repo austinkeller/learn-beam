@@ -44,7 +44,7 @@ python -m apache_beam.examples.wordcount --output counts
 
 This pulls the data from GCP and then outputs to the file locally to `counts-00000-of-00001`.
 
-### Flink
+### Flink (embedded)
 
 To run with the Flink Runner:
 
@@ -54,7 +54,7 @@ python -m apache_beam.examples.wordcount --output flink-counts \
                                          --runner FlinkRunner
 ```
 
-This pulls the beam SDK docker image and apparently runs it on Flink (also a docker server?)
+This will run on an "embedded Flink cluster" by default. Later we can try running against a real Flink cluster running locally with docker.
 
 This outputs to several files, such as `flink-counts-00000-of-00012`.
 
@@ -71,3 +71,34 @@ a456459c18c4b1d50d9f61b2f8946720  -
 ```
 
 The hashes match, so we've achieved the same results! Running locally, the Flink runner is much slower than the direct runner, but the Flink runner will allow us to scale up to much greater volumes of data.
+
+### Flink (docker)
+
+Now we can try standing up a flink cluster locally. Apache Beam 2.30.0 supports up to Flink 1.12 (see [Apache Beam: Flink Version Compatibility](https://beam.apache.org/documentation/runners/flink/#flink-version-compatibility)).
+
+To start the Flink session cluster:
+
+```shell
+pushd flink
+docker-compose up -d
+popd
+```
+
+You can verify that the cluster is up and running by visiting the web UI at http://localhost:8081/
+
+Now try running the wordcount task:
+
+```shell
+source ./venv/bin/activate
+python -m apache_beam.examples.wordcount --output flink-docker-counts \
+                                         --runner PortableRunner \
+                                         --job_endpoint localhost:8099 \
+                                         --flink_version 1.12 \
+                                         --environment_type EXTERNAL \
+                                         --environment_config localhost:50000 \
+                                         --flink_submit_uber_jar
+```
+
+#### Troubleshooting
+
+Try checking the container logs with `pushd flink; docker-compose logs -f`
