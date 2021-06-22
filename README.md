@@ -122,3 +122,15 @@ And the results match what we expect:
 $ cat minimal-counts-000* | sort | md5sum
 a456459c18c4b1d50d9f61b2f8946720  -
 ```
+
+## My wordcount example
+
+```shell
+source ./venv/bin/activate
+python -m wordcount-examples.my_wordcount
+```
+
+```shell
+$ cat my-counts-000* | sort | md5sum
+a456459c18c4b1d50d9f61b2f8946720  -
+```
