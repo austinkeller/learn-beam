@@ -3,7 +3,7 @@ import re
 
 import apache_beam as beam
 import click
-from apache_beam.pipeline import PipelineOptions, StandardOptions
+from apache_beam.pipeline import PipelineOptions
 
 
 @click.command(
@@ -16,7 +16,7 @@ from apache_beam.pipeline import PipelineOptions, StandardOptions
     "--input",
     default="gs://dataflow-samples/shakespeare/kinglear.txt",
 )
-@click.option("--output", type=click.Path(), default="counts")
+@click.option("--output", type=click.Path(), default="minimal-counts")
 @click.option("--loglevel", type=str, default="INFO")
 @click.pass_context
 def cli(ctx, input, output, loglevel):
@@ -31,8 +31,6 @@ def cli(ctx, input, output, loglevel):
 
     pipeline_flags = [
         "--runner=FlinkRunner",
-        "--flink_master=localhost:8081",
-        # "--environment_type=LOOPBACK",
     ]
 
     options = PipelineOptions(pipeline_flags)
