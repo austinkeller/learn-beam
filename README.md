@@ -74,6 +74,8 @@ The hashes match, so we've achieved the same results! Running locally, the Flink
 
 ### Flink (docker)
 
+**NOT YET WORKING**
+
 Now we can try standing up a flink cluster locally. Apache Beam 2.30.0 supports up to Flink 1.12 (see [Apache Beam: Flink Version Compatibility](https://beam.apache.org/documentation/runners/flink/#flink-version-compatibility)).
 
 To start the Flink session cluster:
